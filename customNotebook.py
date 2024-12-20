@@ -20,14 +20,33 @@ class CustomNotebook(ttk.Notebook):
     def on_close_press(self, event):
         """Called when the button is pressed over the close button"""
 
-        element = self.identify(event.x, event.y)
-        index = self.index("@%d,%d" % (event.x, event.y))
-        if "close" in element:
-            self.state(['pressed'])
-            self._active = index
-        global headLst
-        global head
-        head = headLst[index]
+        # element = self.identify(event.x, event.y)
+        # index = self.index("@%d,%d" % (event.x, event.y))
+        # if "close" in element:
+        #     self.state(['pressed'])
+        #     self._active = index
+        # global headLst
+        # global head
+        # head = headLst[index]
+
+        try:
+            # Identify the element and get the tab index
+            element = self.identify(event.x, event.y)
+            index = self.index("@%d,%d" % (event.x, event.y))
+
+            # Proceed only if the clicked element is a close button
+            if "close" in element:
+                self.state(['pressed'])
+                self._active = index
+
+                # Handle the global head reference if necessary
+                global headLst, head
+                head = headLst[index]
+        except tk.TclError:
+            # Handle the case where no valid tab is identified
+            print("No valid tab identified at the clicked position.")
+
+        
     def on_close_release(self, event):
         """Called when the button is released over the close button"""
         # if not self.instate(['pressed']):

@@ -2,17 +2,15 @@ import tkinter as tk
 import operator
 import json
 # import pdb
-#from settings import storeObject
+#from settings import storemetaBox
 from textBox import AutoResizedText
-from ttkEx import CustomNotebook
+from customNotebook import CustomNotebook
 import copy
 import sys
 from tkinter import filedialog
 from tkinter import ttk
-# https://tkdocs.com/tutorial/text.html <- good for learning tk.;
-#text.see() is helpful for future
-#http://tcl.tk/man/tcl8.5/TkCmd/grid.htm#M24
-class object:# so our bug exists on the first nodes siblings.
+
+class metaBox:# so our bug exists on the first nodes siblings.
     def __init__(self, master,height=0,width=0,word= "",child= None,parent = None, sibling= None):
         self.master = master
         self.child = child 
@@ -22,7 +20,7 @@ class object:# so our bug exists on the first nodes siblings.
         self.height=height	
         self.txtBox(word)
         frame.grid_columnconfigure(width*2,minsize=40)
-        print(self.txt.grid_info())
+        # print(self.txt.grid_info())
     def txtBox(self,word):
         self.word = word.strip("\r\n") 
         nlines = word.count('\n')
@@ -30,59 +28,66 @@ class object:# so our bug exists on the first nodes siblings.
         nWidth = word.split("\n")
         maxLineLength = findMaxLine(nWidth)
         self.txt = AutoResizedText(self.master, family="Arial",size=8, width = maxLineLength , height = nlines,background = "black",foreground = "white") #how to make int go by characters or something similar
-        self.txt.grid(row = self.height, column = self.width,columnspan = 2,sticky = "ew")
+        self.txt.grid(row = self.height, column = self.width,sticky = "ew")
         self.txt._fit_to_size_of_text(word)
         self.txt.bind("<Shift-Insert>",self.deleteSelf)
         self.txt.bind('<Shift-Up>',self.moveUp)
         self.txt.bind('<Shift-Down>',self.insertSibling)
         self.txt.bind('<Shift-Right>',self.insertChild)
 
-    def moveUp(self,cow):
+    def moveUp(self,event):
         if(self.parent):
             self.parent.txt.focus()
-    	#pixel padding
-    	#x,y
+
     def moveDown(self):
         curr = self
         while curr.parent is not None:
             curr = curr.parent
         sortButtons(curr,0,0)
 
-    def insertSibling(self,cow):
+    def insertSibling(self,event):
         if(self.sibling):
             #self=self.sibling
             print("sibling")
             self.sibling.txt.focus()
             return
-        bob = object(self.master,self.height+1,self.width,parent = self)
+        bob = metaBox(self.master,self.height+1,self.width,parent = self)
         self.sibling = bob
         mainCanvas.yview_scroll(100, "units")
         sortButtons(head,0,0)
 
-    def insertChild(self,cow):
+    def insertChild(self,event):
         if (self.child):
             self.child.txt.focus() 
             return
-        nextNode = object(self.master,self.height+1,self.width+1,parent = self)
+        nextNode = metaBox(self.master,self.height+1,self.width+1,parent = self)
         self.child = nextNode
         sortButtons(head,0,0)#what's the purpose of this? Well looks through all the buttons EVERY SINGLE ONE. Determines the num of descendents then can you  you know.
 		
-    def deleteSelf(self,cow):#deletes itself as well as all descendents of self
+    def deleteSelf(self,event):#deletes itself as well as all descendents of self
         deleteThis = []
-        findParent = self
+        
         curr = self
         self.txt.destroy()
-# a bug we have is that the roots sibling cannot be deleted if it has children. Why is this the case? Because it's relation
-# to the root is different than normel. So what needs to happen when we delete the node?
 	
         if(self.child is not None):#here we are seeing if it has children so we can delete it and the rest of it's descendents using dfs
             deleteThis.append(self.child)
-        self.parent.child = None
-
-        if(self.sibling is not None):#here we replace the link between the parent and the self with either none or it's sibling.
-            self.parent.child = self.sibling
-        else:		
-            self.parent.sibling =None
+            print("has children\n")
+            # self.child = None#ensuring child is deleted
+        # self.parent.child = None#child removing reference of itself
+        
+    if(self.sibling is None):
+            self.parent.child = None
+        elif(self.sibling is not None):
+            if self.parent.child is self:#eldest sibling
+                self.parent.child = self.sibling
+                self.sibling.parent = self.parent
+                print("eldest sibling")
+            
+            else:#not eldest sibling
+                self.parent.sibling = self.sibling
+                self.sibling.parent = self.parent
+                print("normal sibling")
         while deleteThis:
             curr = deleteThis.pop(0)
             curr.txt.destroy()
@@ -90,14 +95,15 @@ class object:# so our bug exists on the first nodes siblings.
                 deleteThis.append(curr.child)
             if(curr.sibling is not None):
                 deleteThis.append(curr.sibling)
+            curr.sibling = None
+            curr.parent = None
+            curr.child = None
             curr = None # DELETES REFERENCE To child
-            sortButtons(head,0,0)
-    def bob(self,cow):
-        print("bob")
-        print(self.child.txt)
-        self.child.txt.focus_set()
-        self = self.child
-	
+        sortButtons(head,0,0)
+        self.parent.txt.focus()
+        self.child = None
+        self.sibling = None
+        self.parent = None
 
 def insertNode(height,width):#inserts node into correct spot on tree given height and width
     global head
@@ -209,7 +215,7 @@ def NodeExists(height,width,start,Frame):#searches if the Node exists within the
             stack.append(curr.child)
         if curr.sibling is not None:
             stack.append(curr.sibling)
-    return object(Frame,self.height+1,self.width+1,parent = self)
+    return metaBox(Frame,self.height+1,self.width+1,parent = self)
 # @@@@@@@@@@@@@@@@@ THIS IS WHERE MENU METHODS START@@@@@@@@@@@@@@@@
 def initializeBorderButtons(master,frame):
     menu = tk.Menu(master)
@@ -239,7 +245,7 @@ def newTab(master):
 	newFrame = tk.Frame(master)
 	notebook.add(newFrame,text = "untitled")
 	# framelst.add(newFrame)
-	head = object(newFrame)
+	head = metaBox(newFrame)
 def save():
     file = filedialog.asksaveasfile(mode='w', defaultextension=".txt")
     global head
@@ -260,18 +266,18 @@ def openTheFile(master):
 	with open(filePath) as json_file:  
 		data = json.load(json_file)
 		global head
-		head = object(master,data[0]["height"],data[0]["width"],data[0]["word"])
+		head = metaBox(master,data[0]["height"],data[0]["width"],data[0]["word"])
 		curr = head
 		descendentCounter = 0
 		for index in range(1,len(data)):
 			if((curr.height+1 == data[index]["height"]) and (curr.width+1==data[index]["width"])):#if the next node is a child to curr
-				bob = object(master,data[index]["height"],data[index]["width"],data[index]["word"],parent = curr)
+				bob = metaBox(master,data[index]["height"],data[index]["width"],data[index]["word"],parent = curr)
 				curr.child = bob
 				curr = curr.child
 				print("child found")
 			elif(curr.width+1 != data[index]["width"]):#it's a sibling to someone therefore width between curr and next node are the same
 				curr = ancestor(curr,data[index]["width"])
-				bob = object(master,data[index]["height"],data[index]["width"],data[index]["word"],parent = curr)
+				bob = metaBox(master,data[index]["height"],data[index]["width"],data[index]["word"],parent = curr)
 				bob.parent.sibling = bob
 				curr = curr.sibling
 				print("sibling found")
