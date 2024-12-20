@@ -30,7 +30,7 @@ class metaBox:# so our bug exists on the first nodes siblings.
         self.txt = AutoResizedText(self.master, family="Arial",size=8, width = maxLineLength , height = nlines,background = "black",foreground = "white") #how to make int go by characters or something similar
         self.txt.grid(row = self.height, column = self.width,sticky = "ew")
         self.txt._fit_to_size_of_text(word)
-        self.txt.bind("<Shift-Insert>",self.deleteSelf)
+        self.txt.bind("<Shift-Delete>",self.deleteSelf)
         self.txt.bind('<Shift-Up>',self.moveUp)
         self.txt.bind('<Shift-Down>',self.insertSibling)
         self.txt.bind('<Shift-Right>',self.insertChild)
@@ -65,45 +65,50 @@ class metaBox:# so our bug exists on the first nodes siblings.
         sortButtons(head,0,0)#what's the purpose of this? Well looks through all the buttons EVERY SINGLE ONE. Determines the num of descendents then can you  you know.
 		
     def deleteSelf(self,event):#deletes itself as well as all descendents of self
-        deleteThis = []
-        
-        curr = self
-        self.txt.destroy()
-	
+
+        #to simplify program we are removing DFS/BFS in delete self and simply not allowing
+        #NODE NOT ALLOWED TO BE DELETED IF HAS CHILDREN
         if(self.child is not None):#here we are seeing if it has children so we can delete it and the rest of it's descendents using dfs
-            deleteThis.append(self.child)
-            print("has children\n")
-            # self.child = None#ensuring child is deleted
-        # self.parent.child = None#child removing reference of itself
+            # deleteThis.append(self.child)
+            # self.child=None
+            return;
+        else:
+             self.txt.destroy()
+
+        # deleteThis = []
+        # curr = self
         
-    if(self.sibling is None):
-            self.parent.child = None
-        elif(self.sibling is not None):
-            if self.parent.child is self:#eldest sibling
+
+
+        if(self.sibling is not None):#here we replace the link between the parent and the self with either none or it's sibling.
+            if self.parent.child == self:#eldest sibling
                 self.parent.child = self.sibling
                 self.sibling.parent = self.parent
                 print("eldest sibling")
-            
             else:#not eldest sibling
                 self.parent.sibling = self.sibling
                 self.sibling.parent = self.parent
                 print("normal sibling")
-        while deleteThis:
-            curr = deleteThis.pop(0)
-            curr.txt.destroy()
-            if(curr.child is not None):
-                deleteThis.append(curr.child)
-            if(curr.sibling is not None):
-                deleteThis.append(curr.sibling)
-            curr.sibling = None
-            curr.parent = None
-            curr.child = None
-            curr = None # DELETES REFERENCE To child
-        sortButtons(head,0,0)
+        elif self.parent.sibling == self:#youngest sibling
+            self.parent.sibling =None
+            # self.parent.child = None
+            print("youngest child")
+        elif self.parent.child == self:#only child
+            # self.parent.sibling =None
+            self.parent.child = None
+            print("no sibling")
+        # while deleteThis:
+        #     curr = deleteThis.pop(0)
+        #     curr.txt.destroy()
+        #     if(curr.child is not None):
+        #         deleteThis.append(curr.child)
+        #     if(curr.sibling is not None):
+        #         deleteThis.append(curr.sibling)
+        #     curr = None # DELETES REFERENCE To child
+        #     curr.parent = None
+
+        sortButtons(head,0,0) #reorganizes GUI to fit the new structure created
         self.parent.txt.focus()
-        self.child = None
-        self.sibling = None
-        self.parent = None
 
 def insertNode(height,width):#inserts node into correct spot on tree given height and width
     global head
