@@ -1,8 +1,8 @@
+
 # ProblemSolvingApp
 
-Designed and developed an app that helps users solve difficult/big problems by providing them with
-a template to break problems into smaller/easier ones, then to break those sub-problems into even
-smaller ones continuing this process until the problems are at a manageable level.
+ProblemSolvingApp is a Python-based tool designed to help users tackle complex problems or goals by breaking them down into smaller, manageable parts. 
+The app uses a tree structure to organize problems and sub-problems, making it easier to navigate and solve them step by step. 
 
 • Programmed in Python. Implemented a tree using double linked lists and 
 traversed through this tree using DFS/BFS(AKA breadth first/ depth first search)
