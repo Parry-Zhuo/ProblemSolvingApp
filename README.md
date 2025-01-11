@@ -40,3 +40,5 @@ Here is a code snippet from "selectedButton.py"
                 deleteThis.append(curr.sibling)
             curr = None # DELETES REFERENCE To child
             sortButtons(head,0,0) #reorganizes GUI to fit the new structure created
+
+**Note** The updated verseion has been implemented into https://github.com/Parry-Zhuo/DeliberatePracticeTimer
