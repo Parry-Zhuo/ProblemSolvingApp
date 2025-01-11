@@ -17,6 +17,8 @@ the app including linked lists, dictionaries, hash tables, and many ways of usin
 
 ![image](https://user-images.githubusercontent.com/36753290/170846460-1703f019-fa4b-4351-bf40-a6230a6f68ed.png)
 
+**Note** The updated verseion has been implemented into https://github.com/Parry-Zhuo/DeliberatePracticeTimer
+
 Here is a code snippet from "selectedButton.py" 
 ```python
     def deleteSelf(self):#deletes itself as well as all descendents of self utilizing DFS
@@ -41,4 +43,4 @@ Here is a code snippet from "selectedButton.py"
             curr = None # DELETES REFERENCE To child
             sortButtons(head,0,0) #reorganizes GUI to fit the new structure created
 
-**Note** The updated verseion has been implemented into https://github.com/Parry-Zhuo/DeliberatePracticeTimer
+
