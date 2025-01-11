@@ -19,7 +19,7 @@ the app including linked lists, dictionaries, hash tables, and many ways of usin
 
 Here is a code snippet from "selectedButton.py" 
 ```python
-    def deleteSelf(self,cow):#deletes itself as well as all descendents of self utilizing DFS
+    def deleteSelf(self):#deletes itself as well as all descendents of self utilizing DFS
         deleteThis = []
         findParent = self
         curr = self
