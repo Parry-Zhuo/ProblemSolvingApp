@@ -2,10 +2,12 @@
 This Tkinter application allows you to create cascading text boxes in a tree-like hierarchy. Each text box represents a node in a double-linked tree—every node references its parent, child, and sibling. The tree is traversed with DFS and BFS to manage layout and operations like adding/removing nodes.
 
 Key Features
-Double-linked Tree: Each node (metaBox) has parent, child, and sibling pointers.
-Dynamic Layout: Nodes auto-resize, and their positions are recalculated whenever a new node is added or removed.
-DFS & BFS: Used in methods like sortButtons (reorganizing layout), countChildren, traverse (pre-order collection for saving), and more.
 
+Double-linked Tree: Each node (metaBox) has parent, child, and sibling pointers.
+
+Dynamic Layout: Nodes auto-resize, and their positions are recalculated whenever a new node is added or removed.
+
+DFS & BFS: Used in methods like sortButtons (reorganizing layout), countChildren, traverse (pre-order collection for saving), and more.
 
 ![image](https://user-images.githubusercontent.com/36753290/170846460-1703f019-fa4b-4351-bf40-a6230a6f68ed.png)
 
