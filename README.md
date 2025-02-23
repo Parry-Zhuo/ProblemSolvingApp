@@ -1,6 +1,4 @@
 
-ReadMe
-Overview
 This Tkinter application allows you to create cascading text boxes in a tree-like hierarchy. Each text box represents a node in a double-linked tree—every node references its parent, child, and sibling. The tree is traversed with DFS and BFS to manage layout and operations like adding/removing nodes.
 
 Key Features
