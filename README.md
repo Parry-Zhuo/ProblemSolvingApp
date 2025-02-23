@@ -1,25 +1,19 @@
 
-# ProblemSolvingApp
+ReadMe
+Overview
+This Tkinter application allows you to create cascading text boxes in a tree-like hierarchy. Each text box represents a node in a double-linked tree—every node references its parent, child, and sibling. The tree is traversed with DFS and BFS to manage layout and operations like adding/removing nodes.
 
-ProblemSolvingApp is a Python-based tool designed to help users tackle complex problems or goals by breaking them down into smaller, manageable parts. 
-The app uses a tree structure to organize problems and sub-problems, making it easier to navigate and solve them step by step. 
-
-• Programmed in Python. Implemented a tree using double linked lists and 
-traversed through this tree using DFS/BFS(AKA breadth first/ depth first search)
-
-• Explored and implemented a variety of data-structures while creating iterations of
-the app including linked lists, dictionaries, hash tables, and many ways of using arrays
-
-• Gained practical experience in optimizing code for performance and scalability while maintaining a focus on readability and maintainability
-
-• Created the GUI in TKINTER gaining exposure to the structure of GUI's are programmed
+Key Features
+Double-linked Tree: Each node (metaBox) has parent, child, and sibling pointers.
+Dynamic Layout: Nodes auto-resize, and their positions are recalculated whenever a new node is added or removed.
+DFS & BFS: Used in methods like sortButtons (reorganizing layout), countChildren, traverse (pre-order collection for saving), and more.
 
 
 ![image](https://user-images.githubusercontent.com/36753290/170846460-1703f019-fa4b-4351-bf40-a6230a6f68ed.png)
 
 **Note** The updated verseion has been implemented into https://github.com/Parry-Zhuo/DeliberatePracticeTimer
 
-Here is a code snippet from "selectedButton.py" 
+Here is an example code snippet from "selectedButton.py" which uses Depth first search to delete a node.
 ```python
     def deleteSelf(self):#deletes itself as well as all descendents of self utilizing DFS
         deleteThis = []
